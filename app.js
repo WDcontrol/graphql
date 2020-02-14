@@ -4,6 +4,16 @@ const app = express();
 const expressPlayground = require("graphql-playground-middleware-express")
   .default;
 const schema = require("./schema/schema");
+const mongoose = require("mongoose");
+
+mongoose.connect("mongodb://user:user123@ds219459.mlab.com:19459/graphql", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+mongoose.connection.once("open", () => {
+  console.log("database connected");
+});
 
 app.use(
   "/graphql",

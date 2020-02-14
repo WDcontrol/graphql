@@ -6,7 +6,8 @@ const {
   GraphQLString,
   GraphQLInt,
   GraphQLID,
-  GraphQLSchema
+  GraphQLSchema,
+  GraphQLList
 } = graphql;
 
 let usersArray = [
@@ -83,6 +84,14 @@ const BookType = new GraphQLObjectType({
     },
     name: {
       type: GraphQLString
+    },
+    users: {
+      type: new GraphQLList(UserType),
+      resolve(parent, args) {
+        return _.filter(usersArray, {
+          userId: parent.id
+        });
+      }
     }
   })
 });
@@ -110,6 +119,12 @@ const RootQuery = new GraphQLObjectType({
       },
       resolve(parent, args) {
         return _.find(booksArray, { id: args.id });
+      }
+    },
+    users: {
+      type: new GraphQLList(UserType),
+      resolve(parent, args) {
+        return usersArray;
       }
     }
   }

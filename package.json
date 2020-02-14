@@ -1,5 +1,5 @@
 {
-  "name": "graphQL",
+  "name": "graphql-test",
   "version": "1.0.0",
   "description": "**overfetching** : le client contrôle la donnée retournée lorsqu'il fetch",
   "main": "app.js",

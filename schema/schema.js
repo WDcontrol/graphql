@@ -1,6 +1,6 @@
 const graphql = require("graphql");
 const _ = require("lodash");
-
+const User = require("../models/user");
 const {
   GraphQLObjectType,
   GraphQLString,
@@ -125,6 +125,26 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(UserType),
       resolve(parent, args) {
         return usersArray;
+      }
+    }
+  }
+});
+
+const Mutation = new GraphQLObjectType({
+  name: "Mutation",
+  fields: {
+    addUser: {
+      type: UserType,
+      args: {
+        firstName: { type: GraphQLString },
+        lastName: { type: GraphQLString }
+      },
+      resolve(parent, args) {
+        let user = new User({
+          firstName: args.firstName,
+          lastName: args.lastName
+        });
+        return user.save();
       }
     }
   }

@@ -4,26 +4,16 @@ const app = express();
 const expressPlayground = require("graphql-playground-middleware-express")
   .default;
 const schema = require("./schema/schema");
-const book = require("./schema/book");
 
 app.use(
-  "/user",
+  "/graphql",
   graphqlHTTP({
     schema,
     graphiql: true
   })
 );
 
-app.use(
-  "/book",
-  graphqlHTTP({
-    book,
-    graphiql: true
-  })
-);
-
-app.get("/userPlayground", expressPlayground({ endpoint: "/user" }));
-app.get("/bookPlayground", expressPlayground({ endpoint: "/book" }));
+app.get("/playground", expressPlayground({ endpoint: "/graphql" }));
 
 app.listen(4000, () => {
   console.log("app listening on port 4000");

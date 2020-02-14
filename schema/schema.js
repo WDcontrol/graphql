@@ -36,6 +36,21 @@ let usersArray = [
   }
 ];
 
+let booksArray = [
+  {
+    id: "1",
+    name: "Canigula"
+  },
+  {
+    id: "2",
+    name: "Bastien Bastienne"
+  },
+  {
+    id: "3",
+    name: "Les cité dor"
+  }
+];
+
 const UserType = new GraphQLObjectType({
   name: "User",
   fields: () => ({
@@ -60,6 +75,18 @@ const UserType = new GraphQLObjectType({
   })
 });
 
+const BookType = new GraphQLObjectType({
+  name: "Book",
+  fields: () => ({
+    id: {
+      type: GraphQLID
+    },
+    name: {
+      type: GraphQLString
+    }
+  })
+});
+
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
@@ -72,6 +99,17 @@ const RootQuery = new GraphQLObjectType({
       },
       resolve(parent, args) {
         return _.find(usersArray, { id: args.id });
+      }
+    },
+    book: {
+      type: BookType,
+      args: {
+        id: {
+          type: GraphQLID
+        }
+      },
+      resolve(parent, args) {
+        return _.find(booksArray, { id: args.id });
       }
     }
   }

@@ -55,7 +55,7 @@ let booksArray = [
 const UserType = new GraphQLObjectType({
   name: "User",
   fields: () => ({
-    id: {
+    _id: {
       type: GraphQLID
     },
     firstName: {
@@ -79,7 +79,7 @@ const UserType = new GraphQLObjectType({
 const BookType = new GraphQLObjectType({
   name: "Book",
   fields: () => ({
-    id: {
+    _id: {
       type: GraphQLID
     },
     name: {
@@ -107,7 +107,7 @@ const RootQuery = new GraphQLObjectType({
         }
       },
       resolve(parent, args) {
-        return _.find(usersArray, { id: args.id });
+        return User.findById(args.id);
       }
     },
     book: {
@@ -124,7 +124,7 @@ const RootQuery = new GraphQLObjectType({
     users: {
       type: new GraphQLList(UserType),
       resolve(parent, args) {
-        return usersArray;
+        return User.find({});
       }
     }
   }
@@ -137,14 +137,56 @@ const Mutation = new GraphQLObjectType({
       type: UserType,
       args: {
         firstName: { type: GraphQLString },
-        lastName: { type: GraphQLString }
+        lastName: { type: GraphQLString },
+        age: { type: GraphQLInt },
+        size: { type: GraphQLInt },
+        weight: { type: GraphQLInt }
       },
       resolve(parent, args) {
         let user = new User({
           firstName: args.firstName,
-          lastName: args.lastName
+          lastName: args.lastName,
+          age: args.age,
+          size: args.size,
+          weight: args.weight
         });
         return user.save();
+      }
+    },
+    removeUser: {
+      type: UserType,
+      args: {
+        id: { type: GraphQLID }
+      },
+      resolve(parent, args) {
+        return User.deleteOne({
+          _id: args.id
+        });
+      }
+    },
+    editUser: {
+      type: UserType,
+      args: {
+        id: { type: GraphQLID },
+        firstName: { type: GraphQLString },
+        lastName: { type: GraphQLString },
+        age: { type: GraphQLInt },
+        size: { type: GraphQLInt },
+        weight: { type: GraphQLInt }
+      },
+      resolve(parent, args) {
+        return User.updateOne(
+          {
+            _id: args.id
+          },
+          {
+            firstName: args.firstName,
+            lastName: args.lastName,
+            age: args.age,
+            size: args.size,
+            weight: args.weight
+          }
+        );
       }
     }
   }
